@@ -19,10 +19,10 @@ export default function App() {
 
       <Footer>
         <Nav>
-          <p>Home</p>
-          <p>Random</p>
-          <p>Favorites</p>
-          <p>Get Creative</p>
+          <a href="/">Home</a>
+          <a href="/random">Random</a>
+          <a href="/favorites">Favorites</a>
+          <a href="/creative">Get Creative</a>
         </Nav>
       </Footer>
     </>
@@ -71,10 +71,9 @@ const Footer = styled.footer`
   width: 100%;
   text-align: center;
 
-  p {
+  a {
     margin: 0;
     padding: 1rem;
-    width: 100%;
   }
 `;
 
