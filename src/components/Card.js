@@ -1,19 +1,16 @@
 import styled from "styled-components";
 
-export default function Card() {
+export default function Card({ name, image }) {
   return (
     <StyledCard>
-      <Img
-        src="https://rickandmortyapi.com/api/character/avatar/2.jpeg"
-        alt=""
-      />
-      <H2>Morty Smith</H2>
+      <Img src={image} alt="" />
+      <H2>{name}</H2>
     </StyledCard>
   );
 }
 
-const StyledCard = styled.article`
-  margin: auto;
+const StyledCard = styled.li`
+  margin: 10px auto;
   border: 1px solid black;
   width: 70%;
 `;
