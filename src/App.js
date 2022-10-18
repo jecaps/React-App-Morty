@@ -1,7 +1,21 @@
-import "./App.css";
+import styled from "styled-components";
+import Card from "./components/Card";
+import Nav from "./components/Nav";
+import Header from "./components/Header";
 
-function App() {
-  return <div className="App"></div>;
+export default function App() {
+  return (
+    <>
+      <Header />
+      <Main>
+        <Card />
+      </Main>
+      <Nav />
+    </>
+  );
 }
 
-export default App;
+const Main = styled.main`
+  margin: 5rem auto;
+  width: 500px;
+`;
