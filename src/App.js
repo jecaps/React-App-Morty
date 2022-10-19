@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-
+import { Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 
-import Header from "./components/Header";
 import Card from "./components/Card";
-import Nav from "./components/Nav";
+import Character from "./pages/Character";
+import Layout from "./components/Layout";
 
 export default function App() {
   const [characters, setCharacters] = useState([]);
@@ -20,28 +20,53 @@ export default function App() {
 
   return (
     <>
-      <Header />
-      <Main>
-        <CardsList>
-          {characters.map((character) => (
-            <Card
-              key={character.id}
-              name={character.name}
-              image={character.image}
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route>
+            <Route
+              index
+              element={
+                <CardsList>
+                  {characters.map((character) => (
+                    <Card
+                      key={character.id}
+                      id={character.id}
+                      name={character.name}
+                      image={character.image}
+                      gender={character.gender}
+                      status={character.status}
+                      species={character.species}
+                    />
+                  ))}
+                </CardsList>
+              }
             />
-          ))}
-        </CardsList>
-      </Main>
-      <Nav />
+
+            <Route
+              path=":id/"
+              element={<Character characters={characters} />}
+            />
+          </Route>
+
+          <Route
+            path="favorites"
+            element={
+              <CardsList>
+                {characters.map((character) => (
+                  <Card
+                    key={character.id}
+                    name={character.name}
+                    image={character.image}
+                  />
+                ))}
+              </CardsList>
+            }
+          />
+        </Route>
+      </Routes>
     </>
   );
 }
-
-const Main = styled.main`
-  margin: 5rem auto;
-  width: 500px;
-`;
-
 const CardsList = styled.ul`
   padding: 0;
   gap: 5px;
