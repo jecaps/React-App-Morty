@@ -1,74 +1,46 @@
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import styled from "styled-components";
+import { saveToLocal, loadFromLocal } from "./lib/localStorage";
 
-import Card from "./components/Card";
-import Character from "./pages/Character";
 import Layout from "./components/Layout";
+import Favorites from "./pages/Favorites";
+import Home from "./pages/Home";
+import Character from "./pages/Character";
+import { CharacterContext } from "./context/CharacterContext";
 
 export default function App() {
-  const [characters, setCharacters] = useState([]);
+  const [data, setData] = useState([]);
+
+  const [characters, setCharacters] = useState(
+    loadFromLocal("saved characters") ?? data
+  );
+
+  useEffect(() => {
+    saveToLocal("saved characters", characters);
+  }, [characters]);
 
   useEffect(() => {
     async function getData() {
       const RES = await fetch("https://rickandmortyapi.com/api/character");
       const DATA = await RES.json();
-      setCharacters(DATA.results);
+      setData(DATA.results.map((result) => ({ ...result, favorite: false })));
     }
     getData();
   }, []);
 
   return (
-    <>
+    <CharacterContext.Provider value={{ characters, setCharacters }}>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route>
-            <Route
-              index
-              element={
-                <CardsList>
-                  {characters.map((character) => (
-                    <Card
-                      key={character.id}
-                      id={character.id}
-                      name={character.name}
-                      image={character.image}
-                      gender={character.gender}
-                      status={character.status}
-                      species={character.species}
-                    />
-                  ))}
-                </CardsList>
-              }
-            />
+            <Route index element={<Home />} />
 
-            <Route
-              path=":id/"
-              element={<Character characters={characters} />}
-            />
+            <Route path=":id/" element={<Character />} />
           </Route>
 
-          <Route
-            path="favorites"
-            element={
-              <CardsList>
-                {characters.map((character) => (
-                  <Card
-                    key={character.id}
-                    name={character.name}
-                    image={character.image}
-                  />
-                ))}
-              </CardsList>
-            }
-          />
+          <Route path="favorites" element={<Favorites />} />
         </Route>
       </Routes>
-    </>
+    </CharacterContext.Provider>
   );
 }
-const CardsList = styled.ul`
-  padding: 0;
-  gap: 5px;
-  list-style: none;
-`;

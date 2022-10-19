@@ -1,13 +1,15 @@
-import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { CharacterContext } from "../context/CharacterContext";
+import styled from "styled-components";
 
-export default function Character({ characters }) {
+export default function Character() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { characters } = useContext(CharacterContext);
 
   const character = characters.filter((c) => c.id === Number(id));
 
-  console.log(character);
   return (
     <Div>
       <img src={character[0]["image"]} alt="" />
@@ -18,7 +20,9 @@ export default function Character({ characters }) {
       <p>Location: {character[0]["location"]["name"]}</p>
       <ul>
         <p>Episodes Appeared: </p>{" "}
-        {character[0]["episode"].map((ep) => <li>{ep}</li>).slice(0, 10)}
+        {character[0]["episode"]
+          .map((ep) => <li key={ep}>{ep}</li>)
+          .slice(0, 10)}
       </ul>
       <button onClick={() => navigate("/")}>Back to Home</button>
     </Div>
